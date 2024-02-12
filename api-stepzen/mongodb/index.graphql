@@ -1,0 +1,36 @@
+type DocumentsEntry {
+  _id: String
+  exercise: String
+  reps: Int
+  weight: Float
+}
+
+type Root {
+  documents: [DocumentsEntry]
+}
+
+type Query {
+  sets(exercise: String!, username: String!): Root
+    @rest(
+      method: POST
+      endpoint: "https://eu-west-2.aws.data.mongodb-api.com/app/data-aruww/endpoint/data/v1/action/find"
+      headers: [
+        { name: "access-control-request-headers", value: "*" }
+        {
+          name: "api-key"
+          value: "uOP9vrMtcGmVt5jAOVgPbIRquZVCwta0QbADrAyBdgVZXKckZNLFahxp7M1M3XIg"
+        }
+      ],
+      postbody: """
+        {
+          "collection": "sets",
+          "dataSource": "Cluster5",
+          "database": "cityfit",
+          "filter": {
+            "exercise": "{{ .Get "exercise" }}",
+            "username": "{{ .Get "username" }}"
+          }
+        }
+      """
+    )
+}
