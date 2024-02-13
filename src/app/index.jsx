@@ -1,13 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator, Button, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ExerciseListItem from '../components/ExerciseListItem';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { gql } from 'graphql-request';
 import client from '../graphqlClient';
-import { Redirect, Stack } from 'expo-router';
+import { Redirect, Stack, useNavigation } from 'expo-router';
 import { useAuth } from '../providers/AuthContext';
 import { useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
+import tw from 'twrnc';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome6 } from '@expo/vector-icons';
 
 const exercisesQuery = gql`
   query exercises($muscle: String, $name: String, $offset: Int){
@@ -19,9 +22,10 @@ const exercisesQuery = gql`
   }
 `
 
-export default function ExerciseTrackerHome() {
+export default function index() {
   const [search, setSearch] = useState('');
   const debouncedSearchTerm = useDebounce(search.trim(), 1000);
+  const navigation = useNavigation();
 
   const { data, isLoading, error, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ['exercises', debouncedSearchTerm],
@@ -38,7 +42,7 @@ export default function ExerciseTrackerHome() {
     fetchNextPage();
   }
 
-    const {username} = useAuth();
+  const {username} = useAuth();
 
   if (isLoading) {
     return <ActivityIndicator />
@@ -56,6 +60,16 @@ export default function ExerciseTrackerHome() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.navbar}>
+        <TouchableOpacity onPress={() => navigation.navigate("foodScreen")} style={[styles.navButton, styles.leftButton]}>
+        <FontAwesome6 name="bowl-food" size={24} color="black" />
+          <Text style={styles.navButtonText}>Recipe List</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("fitbot")} style={[styles.navButton, styles.rightButton]}>
+        <FontAwesome5 name="robot" size={24} color="black" />
+          <Text style={styles.navButtonText}>Fit Bot</Text>
+        </TouchableOpacity>
+      </View>
       <Stack.Screen options={{headerSearchBarOptions: {
         placeholder: "Search...",
         onChangeText: (event) => setSearch(event.nativeEvent.text),
@@ -67,8 +81,6 @@ export default function ExerciseTrackerHome() {
       onEndReached={loadMore}
       contentInsetAdjustmentBehavior='automatic'
        />
-      {/* <Button title='Load More' onPress={fetchNextPage} /> */}
-
       <StatusBar style="auto" />
     </View>
   );
@@ -77,29 +89,33 @@ export default function ExerciseTrackerHome() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'gainsboro',
-    justifyContent: 'center',
+    backgroundColor: 'lightgray',
   },
-  subValue: {
-    textTransform: 'capitalize',
+  navbar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    marginTop: 10,
   },
-  container: {
-    padding: 20,
-    gap: 10
+  navButton: {
+    flexDirection: 'row', // Add flexDirection to align icon and text horizontally
+    alignItems: 'center',
+    height: 40,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    backgroundColor: 'rgba(255, 0, 0, 0.7)',
   },
-  instructions: {
+  leftButton: {
+    marginRight: 5,
+  },
+  rightButton: {
+    marginLeft: 5,
+  },
+  navButtonText: {
+    color: 'white',
     fontSize: 16,
-    lineHeight: 25
+    fontWeight: 'bold',
+    marginLeft: 5, // Add margin between icon and text
   },
-  panel: {
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 5
-  },
-  seeMore: {
-    alignSelf: "center",
-    padding: 10,
-    fontWeight: "bold",
-    color: "gray"
-  }
 });
