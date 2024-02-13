@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ScrollView, TextInput, View, Text, Button, ActivityIndicator } from 'react-native';
 
-const Fitbot = () => {
+const fitbot = () => {
   const API_KEY = process.env.OPENAI_API_KEY;
 
   const [typing, setTyping] = useState(false);
@@ -41,7 +41,7 @@ const Fitbot = () => {
 
     const systemMessage = {
       role: 'system',
-      content: 'Explain all concepts like I am 18 years old.'
+      content: 'Explain all concepts as a personal trainer would.'
     };
 
     const apiRequestBody = {
@@ -77,7 +77,10 @@ const Fitbot = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#ADD8E6' }}>
+      <Text style={{ padding: 10, textAlign: 'center' }}>
+        Fit Bot is your own personal trainer - right on your device! Ask it to provide you with workout plans, meals and anything fitness! Make your journey enjoyable with Fit Bot!
+      </Text>
       <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}>
         {messages.map((message, index) => (
           <View key={index} style={{ flexDirection: message.sender === 'user' ? 'row-reverse' : 'row' }}>
@@ -106,6 +109,7 @@ const Fitbot = () => {
           value={inputMessage}
           onChangeText={(text) => setInputMessage(text)}
           placeholder="Type your message here"
+          onFocus={() => setInputMessage('')} // Clear input message onFocus
         />
         <Button title="Send" onPress={handleSend} />
       </View>
@@ -113,4 +117,4 @@ const Fitbot = () => {
   );
 };
 
-export default Fitbot;
+export default fitbot;
