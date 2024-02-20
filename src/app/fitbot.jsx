@@ -10,7 +10,6 @@ import {
 
 const FitBot = () => {
   const API_KEY = process.env.EXPO_PUBLIC_OPENAI_API_KEY
-  // console.log("API_KEY", API_KEY)
 
   const [typing, setTyping] = useState(false)
   const [inputMessage, setInputMessage] = useState("")
