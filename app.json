@@ -22,7 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.kronium345.cityfitprogram"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -30,6 +31,14 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "90a987f8-2b06-4443-9337-76ebac06bef2"
+      }
+    }
   }
 }
