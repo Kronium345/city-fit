@@ -1,4 +1,5 @@
-import { StatusBar } from "expo-status-bar"
+// import { StatusBar, Platform } from "expo-status-bar"
+import React from "react"
 import {
   ActivityIndicator,
   FlatList,
@@ -6,6 +7,8 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Platform,
+  StatusBar
 } from "react-native"
 import ExerciseListItem from "../components/ExerciseListItem"
 import { useInfiniteQuery } from "@tanstack/react-query"
@@ -74,7 +77,7 @@ export default function index() {
     <View style={styles.container}>
       <View style={styles.navbar}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("foodScreen")}
+          onPress={() => navigation.navigate("Food")}
           style={[styles.navButton, styles.leftButton]}
         >
           <FontAwesome6 name="bowl-food" size={24} color="black" />
@@ -96,15 +99,18 @@ export default function index() {
         </TouchableOpacity>
       </View>
 
-      {/* <Stack.Screen
-        options={{
-          headerSearchBarOptions: {
-            placeholder: "Search...",
-            onChangeText: (event) => setSearch(event.nativeEvent.text),
-            hideWhenScrolling: false,
-          },
-        }}
-      /> */}
+      {Platform.OS === "android" && (
+        // Render search bar only on Android
+        <Stack.Screen
+          options={{
+            headerSearchBarOptions: {
+              placeholder: "Search...",
+              onChangeText: (event) => setSearch(event.nativeEvent.text),
+              hideWhenScrolling: false,
+            },
+          }}
+        />
+      )}
 
       <FlatList
         data={exercises}
